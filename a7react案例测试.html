@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<style>
+.active {display:none}
+</style>
+<script src="./build/react.js"></script>
+<script src="./build/react-dom.js"></script>
+<script src="./build/browser.min.js"></script>
+</head>
+<body>
+	<div id="example"></div>
+	<div id="example1"></div>
+	<div id="example2"></div>
+	<script type="text/babel">
+		var Component=React.createClass({
+			render:function() {
+				return (
+					<ul>
+						{
+							React.Children.map(this.props.children,function(child) {
+								return <li>{child}</li>
+							})
+						}
+					</ul>
+				)
+			}
+		})
+
+		ReactDOM.render(
+			<Component>
+				<p>Hello world!</p>
+				<p>Hello Universe!</p>
+			</Component>,
+			document.getElementById("example")
+		)
+	</script>
+	<!-- React遍历子节点的map方法和原生的好像有点不一样：
+		原生js的map方法为：var arr1=Array.map(function(item,index,arr) {})
+		其中arr参数是指原数组，因此，可以通过遍历改变原数组的每一项，还可以在内部return，每一次 return 的内容是新数组arr1的每一项；而forEach方法遍历则不论如何新数组为未定义！
+
+		React遍历子节点的方法是：
+		React.Children.map(this.props.children,function(child) {...})
+		this.props.children是实例中的子节点集合，参数 child是实例中子节点的每一项
+	 -->
+</body>
+</html>

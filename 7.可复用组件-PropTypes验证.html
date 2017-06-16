@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<script src="./build/react.js"></script>
+<script src="./build/react-dom.js"></script>
+<script src="./build/browser.min.js"></script>
+</head>
+<body>
+	<div id="example"></div>
+	<div id="example1"></div>
+	<div id="example2"></div>
+	<script type="text/babel">
+    var MyTitles=React.createClass({
+      propTypes:{
+        title:React.PropTypes.string.isRequired
+      },
+      render:function() {
+        return <h1>{this.props.title}</h1>;
+      }
+    });
+    
+    var data=123;
+    ReactDOM.render(
+      <MyTitles title={data} />,
+      document.body
+    );
+	</script>
+  <!-- 组件的属性可以接受任意值，字符串、对象、函数等等都可以。有时，我们需要一种机制，验证别人使用组件时，提供的参数是否符合要求 -->
+  <!-- 组件类的 PropTypes 属性，就是用来验证组件实例的属性是否符合要求 -->
+
+  <!-- MyTitles组件有一个 title 属性。PropTypes 告诉 React，这个title 属性是必须的，而且它的值必须是字符串。如果设置 title 属性的值是一个数值，则会报错！(但是我按照以上写法FireFox并没有报错) -->
+
+
+	<!-- 
+		Prop 验证
+随着应用不断变大，保证组件被正确使用变得非常有用。为此我们引入 propTypes。React.PropTypes 提供很多验证器 (validator) 来验证传入数据的有效性。当向 props 传入无效数据时，JavaScript 控制台会抛出警告。注意为了性能考虑，只在开发环境验证 propTypes。下面用例子来说明不同验证器的区别：
+
+React.createClass({
+  propTypes: {
+    // 可以声明 prop 为指定的 JS 基本类型。默认
+    // 情况下，这些 prop 都是可传可不传的。
+    optionalArray: React.PropTypes.array,
+    optionalBool: React.PropTypes.bool,
+    optionalFunc: React.PropTypes.func,
+    optionalNumber: React.PropTypes.number,
+    optionalObject: React.PropTypes.object,
+    optionalString: React.PropTypes.string,
+    optionalSymbol: React.PropTypes.symbol,
+
+    // 所有可以被渲染的对象：数字，
+    // 字符串，DOM 元素或包含这些类型的数组(or fragment) 。
+    optionalNode: React.PropTypes.node,
+
+    // React 元素
+    optionalElement: React.PropTypes.element,
+
+    // 你同样可以断言一个 prop 是一个类的实例。
+    // 用 JS 的 instanceof 操作符声明 prop 为类的实例。
+    optionalMessage: React.PropTypes.instanceOf(Message),
+
+    // 你可以用 enum 的方式
+    // 确保你的 prop 被限定为指定值。
+    optionalEnum: React.PropTypes.oneOf(['News', 'Photos']),
+
+    // 指定的多个对象类型中的一个
+    optionalUnion: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.number,
+      React.PropTypes.instanceOf(Message)
+    ]),
+
+    // 指定类型组成的数组
+    optionalArrayOf: React.PropTypes.arrayOf(React.PropTypes.number),
+
+    // 指定类型的属性构成的对象
+    optionalObjectOf: React.PropTypes.objectOf(React.PropTypes.number),
+
+    // 特定形状参数的对象
+    optionalObjectWithShape: React.PropTypes.shape({
+      color: React.PropTypes.string,
+      fontSize: React.PropTypes.number
+    }),
+
+    // 你可以在任意东西后面加上 `isRequired`
+    // 来确保 如果 prop 没有提供 就会显示一个警告。
+    requiredFunc: React.PropTypes.func.isRequired,
+
+    // 不可空的任意类型
+    requiredAny: React.PropTypes.any.isRequired,
+
+    // 你可以自定义一个验证器。如果验证失败需要返回一个 Error 对象。
+    // 不要直接使用 `console.warn` 或抛异常，
+    // 因为这在 `oneOfType` 里不起作用。
+    customProp: function(props, propName, componentName) {
+      if (!/matchme/.test(props[propName])) {
+        return new Error('Validation failed!');
+      }
+    }
+  },
+  /* ... */
+});
+Single Child
+用 React.PropTypes.element 你可以指定仅有一个子级能被传送给组件
+
+var MyComponent = React.createClass({
+  propTypes: {
+    children: React.PropTypes.element.isRequired
+  },
+
+  render: function() {
+    return (
+      <div>
+        {this.props.children} // 这里必须是一个元素否则就会警告
+      </div>
+    );
+  }
+
+});
+默认 Prop 值
+React 支持以声明式的方式来定义 props 的默认值。
+
+var ComponentWithDefaultProps = React.createClass({
+  getDefaultProps: function() {
+    return {
+      value: 'default value'
+    };
+  }
+  /* ... */
+});
+当父级没有传入 props 时，getDefaultProps() 可以保证 this.props.value 有默认值，注意 getDefaultProps 的结果会被 缓存。得益于此，你可以直接使用 props，而不必写手动编写一些重复或无意义的代码。
+
+传递 Props：捷径
+有一些常用的 React 组件只是对 HTML 做简单扩展。通常，你想复制任何传进你的组件的HTML属性到底层的HTML元素上。为了减少输入，你可以用 JSX spread 语法来完成：
+
+var CheckLink = React.createClass({
+  render: function() {
+    // 这样会把 CheckList 所有的 props 复制到 <a>
+    return <a {...this.props}>{'√ '}{this.props.children}</a>;
+  }
+});
+
+ReactDOM.render(
+  <CheckLink href="https://tianxiangbing.github.io/react-cn/checked.html">
+    Click here!
+  </CheckLink>,
+  document.getElementById('example')
+);
+	 -->
+</body>
+</html>

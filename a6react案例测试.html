@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<style>
+.active {display:none}
+</style>
+<script src="./build/react.js"></script>
+<script src="./build/react-dom.js"></script>
+<script src="./build/browser.min.js"></script>
+</head>
+<body>
+	<div id="example"></div>
+	<div id="example1"></div>
+	<div id="example2"></div>
+	<script type="text/babel">
+		function Check(props) {
+			console.log(props);
+			/* props参数是组件实例上所有的属性集合 */
+			var value=props.checked? "Checked":"Unchecked";
+			return (
+				<div className={value}
+					 onClick={props.onClick}>
+					 {props.children}
+				</div>
+			)
+		}
+		ReactDOM.render(
+			<Check checked={true} onClick={console.log.bind(console)}>
+				Hello,world!
+			</Check>,
+			document.getElementById("example")
+		) 
+
+		function Check1(props) {
+			var {checked, ...other}=props;
+			console.log({...other});
+			/* 打印出来的...other里面没有实例中的checked属性 */
+			var attr=checked? "Checked":"Unchecked";
+			return (
+				<div className={attr} 
+					  {...other}>
+					 {props.children}
+				</div>
+			)
+		}
+		/*
+		function Check2(props) {
+			var {checked,title,...other}=props;
+			var checkAttr=checked? "Checked":"Unchecked";
+			var titleAttr=checked? "Title":"No title";
+			return (
+				<div {...other}
+					 className={checkAttr}
+					 onClick={props.onClick}>
+					 {titleAttr}
+				</div>
+			)
+		}
+		*/
+		ReactDOM.render(
+			<Check1 checked={true} onClick={console.log.bind(console)}>Hello,world!</Check1>,document.getElementById("example1")
+		)
+	</script>
+	
+</body>
+</html>

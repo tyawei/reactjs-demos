@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<script src="./build/react.js"></script>
+<script src="./build/react-dom.js"></script>
+<script src="./build/browser.min.js"></script>
+</head>
+<body>
+	<div id="example"></div>
+	<div id="example1"></div>
+	<div id="example2"></div>
+	<script type="text/babel">
+	/* 属性表达式 */
+	/* 要使用javascript表达式作为属性值，只需要把这个表达式用一对大括号({})抱起来 */
+
+	/* 输入JSX */
+	var person=<Person name={window.isLoggedIn? window.name:""} />;
+	/* 输出JS */
+	var person=React.createElement(
+		Person,
+		{name:window.isLoggedIn? window.name:""}
+	);
+
+	/* Boolean属性 */
+	/* 省略一个属性的值会导致JSX把它当做true。要传值false必须使用属性表达式。这常出现于使用HTML表单元素，含有属性如disabled, required, checked和readOnly */
+	/* 在JSX中，对于禁用按钮这二者是相同的。*/
+	<input type="button" disabled />;
+	<input type="button" disabled={true} />;
+	/* 在JSX中，对于不禁用按钮这二者是相同的。*/
+	<input type="button" disabled={false} />;
+
+	/* 子节点表达式 */
+	/* 同样地，javascript表达式可用于描述子节点 */
+	/* 输入JSX */
+	var content=<Container>{window.isLoggedIn? <Nav />:<Login />}</Container>;
+	var content=React.createElement(
+		Container,
+		null,
+		window.isLoggedIn? React.createElement(Nav):React.createElement(Login)
+	);
+
+	/* 注释 */
+	/* JSX里添加注释很容易，他们只是JS表达式而已。你仅仅需要小心的是当你在一个标签的子节点块时，要用{}包围要注释的部分 */
+	var content=(
+		<Nav>
+			{/* child comment,用{}包围 */}
+			<Person
+			/* 多
+			   行
+			   注释 */
+				name={window.isLoggedIn? window.name:""} //行尾注释
+			/>
+		</Nav>
+	);
+
+	</script>
+	
+</body>
+</html>

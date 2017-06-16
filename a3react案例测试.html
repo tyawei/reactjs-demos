@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<style>
+.active {display:none}
+</style>
+<script src="./build/react.js"></script>
+<script src="./build/react-dom.js"></script>
+<script src="./build/browser.min.js"></script>
+</head>
+<body>
+	<div id="example"></div>
+	<div id="example1"></div>
+	<div id="example2"></div>
+	<script type="text/babel">
+		var Component=React.createClass({
+			getInitialState:function() {
+				return {
+					name:false
+				}
+			},
+			getDefaultProps:function() {
+				return {
+					title:"attr"
+				}
+			},
+			handleClick:function(event) {
+				{/* 注意：handleClick里面不加 return！ */}
+				this.setState({name:!this.state.name})
+			},
+			render:function() {
+				var att= this.state.name?"active":"";
+				return (
+					<div>
+						<input type="button" onClick={this.handleClick} value={this.props.title} />
+						{/*<p className={this.state.name}>This is some words</p>*/}
+						<p className={att}>This is some words</p>
+					</div>
+				)
+			}
+		})
+		ReactDOM.render(<Component />,document.getElementById("example"));
+	</script>
+	
+</body>
+</html>

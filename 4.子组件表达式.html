@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<script src="./build/react.js"></script>
+<script src="./build/react-dom.js"></script>
+<script src="./build/browser.min.js"></script>
+</head>
+<body>
+	<div id="example"></div>
+	<div id="example1"></div>
+	<div id="example2"></div>
+	<script type="text/babel">
+		var Login=React.createClass({
+			render:function() {
+				return <div>message</div>
+			}
+		});
+		var Nav=React.createClass({
+			render:function() {
+				return <div>msg</div>
+			}
+		});
+		var Container=React.createClass({
+			render:function() {
+				return window.isLoggedIn? <Nav />:<Login />
+			}
+		});
+		var content=<Container></Container>;
+		ReactDOM.render(content,document.getElementById("example"));
+		
+	</script>
+</body>
+</html>

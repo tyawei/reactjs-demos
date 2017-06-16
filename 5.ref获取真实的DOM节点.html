@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<script src="./build/react.js"></script>
+<script src="./build/react-dom.js"></script>
+<script src="./build/browser.min.js"></script>
+</head>
+<body>
+	<div id="example"></div>
+	<script type="text/babel">
+		var MyComponent=React.createClass({
+			handleClick:function() {
+				this.refs.myTextInput.focus();
+			},
+			render:function() {
+				return (
+					<div>
+						<input type="text" ref="myTextInput" />
+						<input type="button" value="Focus the text input" onclick={this.handleClick} />
+					</div>
+				)
+			}
+		});
+		ReactDOM.render(
+			<MyComponent />,
+			document.getElementById("example")
+		)
+		/* 获取真实的DOM节点的两种方法：
+			var dom=this.refs.[refName].getDOMNode();
+			var dom=React.findDOMNode(this.refs.[refName]);
+		*/
+	</script>
+	<!-- 组件并不是真实的DOM节点，而是存在与内存中的一种数据结构，叫做虚拟DOM。只有当它插入文档以后，才会变成真实的DOM。根据 React 的设计，所有的DOM变动，都先在虚拟DOM上发生，然后再将实际发生变动的部分反映在真实的DOM上，这种算法叫做DOM diff，他可以极大提高网页的性能表现 -->
+	<!-- 但是，有时需要从组件获取真实的DOM节点，这时就要用 ref 属性 -->
+
+	<!-- 上面代码中，组件 MyComponent 的子节点有个文本输入框，用于获取用户的输入。这时就必须获取真实的DOM节点，虚拟DOM是拿不到用户输入的。为了做到这一点，文本输入框必须有个 ref 属性，然后 this.refs.[refName] 就会返回这个真实的 DOM 节点。 -->
+
+	<!-- 需要注意的是，由于 this.refs.[refName] 属性获取的是真实DOM，所以必须等到虚拟DOM插入文档之后，才能使用这个属性，否则会报错。上面代码中，通过为组件制定 Click 事件的回调函数，确保只有等到真实DOM发生 Click 时间之后，才会读取 this.refs.[refName] 属性。React组件支持很多事件，除了Click事件以外，还有KeyDown、Copy、Scroll等 -->
+</body>
+</html>

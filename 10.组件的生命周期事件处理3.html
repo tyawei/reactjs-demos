@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<script src="./build/react.js"></script>
+<script src="./build/react-dom.js"></script>
+<script src="./build/browser.min.js"></script>
+</head>
+<body>
+	<div id="example"></div>
+	<div id="example1"></div>
+	<div id="example2"></div>
+	<script type="text/babel">
+		/* 28页底部 参数传递 */
+	</script>
+	<!-- 
+		React 0.14正式发布，此版本包括一些重要的改进，主要是简化代码编写，提供更好的支持环境，比如 React Native。
+		React 「一分为二」
+
+		原本的 react package 被拆分为 react 及 react-dom 两个 package。其中 react package 中包含 React.createElement、 .createClass、 .Component， .PropTypes， .Children 这些 API，而 react-dom package 中包含 ReactDOM.render、 .unmountComponentAtNode、 .findDOMNode。
+
+		原本在服务端渲染用的两个 API .renderToString 和 .renderToStaticMarkup 被放在了 react-dom/server 中。
+
+		改变之后的结构，一个基本的 React 组件变成了这样：
+
+		var React = require('react');  
+		var ReactDOM = require('react-dom');
+        var MyComponent = React.createClass({  
+		  render: function() {
+		    return <div>Hello World</div>;
+		  }
+		});
+
+		ReactDOM.render(<MyComponent />, node);
+	 -->
+
+	<!-- 
+		ReactJS学习笔记——生命周期、数据流与事件
+144  作者 IT程序狮 关注
+2016.04.11 09:37 字数 3711 阅读 209评论 0喜欢 10
+作者：小米墨客
+原文地址：http://my.oschina.net/feiyangxiaomi/blog/644418
+React是一个JavaScript库文件，使用它的目的在于能够解决构建大的应用和数据的实时变更。该设计使用JSX允许你在构建标签结构时充分利用JavaScript的强大能力，而不必在笨拙的模板语言上浪费时间。
+
+1 生命周期
+
+在组件的整个生命周期中，随着该组件的props或者state发生改变，它的DOM表现也将有相应的变化，一个组件就是一个状态机：对于特定的输入，它总会返回一致的输出。 React为每个组件提供了生命周期钩子函数去响应不同的时刻，组件的生命周期分为三个部分：（1）实例化；（2）存在期；（3）销毁&清理期。
+
+具体周期如下图所示：
+
+
+1.1 实例化
+
+创建在代码加载过程中至关重要，重要之处体现什么地方呢，这里粗略的简述几点：
+
+实例化是首次加载js展示给用户最直观的内容，效率的高低直接决定体验的好坏；
+实例化过程是对数据进行说明和描述的过程。
+实例化过程完成了虚拟DOM和真实DOM的生成。
+下面看下示例来展示当前流程：
+
+var React = require("react");
+var ReactDOM = require("react-dom");
+
+var List = React.createClass({
+    //1.创建阶段
+    getDefaultProps:function() {
+        console.log("getDefaultProps");
+        return {title:""};
+    },
+
+    //2.实例化阶段
+    getInitialState:function() {
+        console.log("getInitialState");
+        return {};
+    },
+
+    //render之前调用，业务逻辑都应该放在这里，如对state的操作等
+    componentWillMount:function() {
+        console.log("componentWillMount");
+    },
+
+    //渲染并返回一个虚拟DOM
+    render:function() {
+        console.log("render");
+        return(
+            <div> hello <strong> {this.props.name} </strong></div>
+            );
+    },
+
+    //该方法发生在render方法之后。在该方法中，ReactJS会使用render生成返回的虚拟DOM对象来创建真实的DOM结构
+    componentDidMount:function() {
+        console.log("componentDidMount");
+    },
+});
+
+
+ReactDOM.render(<List name="ReactJS">children</List>, document.body);
+输出结果为：
+
+getDefaultProps
+getInitialState
+componentWillMount
+render
+componentDidMount
+上面经历的实例化过程可细分成两个阶段：创建阶段和实例化阶段。
+
+1.1.1创建阶段
+
+该阶段主要发生在创建组件类的时候，即调用React.createClass的时候。这个阶段只会触发一个getDefaultProps方法，该方法返回一个对象，并且缓存下来。然后与父组件指定的props对象合并，最后赋值给this.props作为该组件的默认属性。对于那些没有被父辈组件指定的props属性的新建实例来说，这个方法返回的对象可用于为实例设置默认的props值。
+
+props属性又是什么呢，它是一个对象，是组件用来接收外面传来的参数的，组件内部是不允许修改自己的props属性的，只能通过父组件来修改。在getDefaultProps方法中，是可以设定props默认值的。
+
+1.1.2实例化阶段
+
+该阶段主要发生在实例化组件类的时候，也就是该组件类被调用的时候：
+
+ReactDOM.render(<NewView name="ReactJS">children</NewView>, document.body);
+调用顺序在demo结果中页：
+
+getInitialState 初始化组件的state的值，其返回值会赋值给组件的this.state属性。对于组件的每个实例来说，这个方法的调用次数有且只有一次。与getDefaultProps方法不同的是，每次实例创建时该方法都会被调用一次。
+componentWillMount 此方法会在完成首次渲染之前被调用。这也是在render方法调用前可以修改组件state的最后一次机会。
+render 生成页面需要的虚拟DOM结构，用来表示组件的输出。render方法需要满足：
+（1）只能通过this.props和this.state访问数据；
+（2）可以返回null、false或者任何React组件；
+（3）只能出现一个顶级组件；
+（4）必需纯净，意味着不能改变组件的状态或者修改DOM的输出。
+componentDidMount 该方法发生在render方法成功调用并且真实的DOM已经被渲染之后，在该函数内部可以通过this.getDOMNode()来获取当前组件的节点。然后就可以像Web开发中的那样操作里面的DOM元素了。
+上面提到了两个比较生分的术语——state和虚拟DOM：
+
+state：是组件的属性，主要用来存储组件自身需要的数据。它是可以改变的，它的每次改变都会引起组件的更新，这也是ReactJS中的关键点之一。每次数据的更新都是通过修改state属性的值，然后ReactJS内部会监听state属性的变化，一旦发生变化，就会主动出发组件的render方法来更新DOM结构。
+虚拟DOM：它是ReactJS中提出的一个概念，是将真实的DOM结构映射成一个JSON数据结构，在有数据更改的时候更新真实的DOM，不需修改的时候不更新真实的DOM。
+1.2 存在期
+
+由1.1可知，此时组件已经渲染好并且用户可以与它进行交互，通常是通过一次鼠标点击、手指点按或者键盘事件来触发一个事件处理器。随着用户改变了组件或者整个应用的state，便会有新的state流入组件结构树。代码如下所示：
+
+var React = require("react");
+var ReactDOM = require("react-dom");
+
+var NewView = React.createClass({
+    //1.创建阶段
+    getDefaultProps:function() {
+        console.log("getDefaultProps");
+        return {};
+    },
+
+    //2.实例化阶段
+    getInitialState:function() {
+        console.log("getInitialState");
+        return {
+            num:1
+        };
+    },
+
+    //render之前调用，业务逻辑都应该放在这里，如对state的操作等
+    componentWillMount:function() {
+        console.log("componentWillMount");
+    },
+
+    //渲染并返回一个虚拟DOM
+    render:function() {
+        console.log("render");
+        return(
+            <div> hello <strong> {this.props.name} </strong>
+                <button onClick={this.handleAddNumber}> hello <strong> {this.state.num} </strong></button>
+            </div>
+            );
+    },
+
+    //该方法发生在render方法之后。在该方法中，ReactJS会使用render生成返回的虚拟DOM对象来创建真实的DOM结构
+    componentDidMount:function() {
+        console.log("componentDidMount");
+    },
+
+    //3.更新阶段
+    componentWillReceiveProps:function() {
+        console.log("componentWillReceiveProps");
+    },
+
+    //是否需要更新
+    shouldComponentUpdate:function() {
+        console.log("shouldComponentUpdate");
+        return true;
+    },
+
+    //将要更新
+    componentWillUpdate:function() {
+        console.log("componentWillUpdate");
+    },
+
+    //更新完毕
+    componentDidUpdate:function() {
+        console.log("componentDidUpdate");
+    },
+
+    //4.销毁阶段
+    componentWillUnmount:function() {
+        console.log("componentWillUnmount");
+    },
+
+    // 处理点击事件
+    handleAddNumber:function() {
+        console.log("add num");
+        this.setState({num:this.state.num+1});
+        this.setProps({name:"newName"});
+    }
+});
+ReactDOM.render(<NewView name="ReactJS"></NewView>, document.body);
+该段代码的目的是，经历第一阶段实例化阶段，然后提供button按钮，改变state状态，也是调用代码中的handleAddNumber:function()方法，实现第二阶段存在期的更新，该阶段在state状态f发生改变，组件逐渐受到影响。
+
+输出结果为(不包含)：
+
+add num
+componentWillReceiveProps
+shouldComponentUpdate
+componentWillUpdate
+render
+componentDidUpdate
+componentWillReceiveProps 在任意时刻，组件的props都可以通过父辈组件来更改。当组件接收到新的props(这里不同于state）时，会触发该函数，我们同时也获得更改props对象及更新state的机会。
+shouldComponentUpdate 该方法用来拦截新的props和state，然后开发者可以根据自己设定逻辑，做出要不要更新render的决定，让它更快。
+componentWillUpdate 与componentWillMount方法类似，组件上会接收到新的props或者state渲染之前，调用该方法。但是不可以在该方法中更新state和props。
+render 生成页面需要的虚拟DOM结构，并返回该结构。
+componentDidUpdate 与 componentDidMount 类似，更新已经渲染好的DOM。
+1.3 生命周期之销毁&清理
+
+每当react使用完一个组件，这个组件就必须从DOM中卸载随后被销毁。此时，仅有的一个钩子函数会做出响应，完成所有的清理与销毁工作，这很必要。
+
+componentWillUnmount
+
+最后，随着一个组件从它的层级结构中移除，这个组件的生命也就走到了尽头。该方法会在组件被移出之前调被调用。在componentDidMount方法中添加的所有任务都需要在该方法中撤销，比如说创建的定时器或者添加的事件监听等。
+
+1.4 反模式：把计算后的值赋给state
+
+在getInitialState方法中，尝试通过this.props来创建state的做法是一种反模式。
+
+getDefaultProps:function() {
+        console.log("getDefaultProps");
+        return {
+            date:new Date()
+        };
+    },
+
+    getInitialState:function() {
+        console.log("getInitialState");
+        return {
+            num:this.props.date.getDay()
+        };
+    },
+在getInitialState中使用props的值，同时可能存在props的值没有初始化完的状态。导致计算后的值永远不会与派生出他的props值同步。
+
+getDefaultProps:function() {
+        console.log("getDefaultProps");
+        return {
+            date:new Date()
+        };
+    },
+
+    //渲染并返回一个虚拟DOM
+    render:function() {
+        console.log("render");
+        var day = this.props.date.getMonth;
+        return(
+            <div> hello <strong> Day:{day}</strong>
+            </div>
+            );
+    }
+2 数据流与事件操作
+
+在React中，数据流向是单向的——从父节点传递到子节点，因而组件是简单且易于把握的，他们只需从父节点获取props渲染即可。如果顶层组件的某个prop改变了，React会递归地向下遍历整棵组建树，重新渲染所有使用这个属性的组件。 React组件内部还具有自己的状态，这些状态只能在组件内修改。React组件本身很简单，你可以把他们看成是一个函数，他接受props和state作为参数，返回一个虚拟的DOM表现。
+
+2.1 Props
+
+props是properties的缩写，你可以使用它把任意类型的数据传递给组件。我们先创建一个父组件Parent，它内部调用的是一个叫child的子组件，并将接收到的外部参数name传递给子组件child，代码如下所示：
+
+var React = require("react");
+var ReactDOM = require("react-dom");
+
+var Child = React.createClass({
+    getDefaultProps:function() {
+        return {};
+    },
+
+    getInitialState:function() {
+        return {};
+    },
+
+    //渲染并返回一个虚拟DOM
+    render:function() {
+        return(
+            <button> hello {this.props.name}</button>
+            );
+    }
+});
+
+var Parent = React.createClass({
+    render:function() {
+        return(
+            <div onClick={this.onClick}>
+                <Child name={this.props.name} id="child"> </Child>
+            </div>
+            );
+    },
+
+    onClick:function() {
+        console.log(ReactDOM.findDOMNode(document.body));
+    }
+});
+
+ReactDOM.render(<Parent  name="123"></Parent>, document.body);
+我们在Parent上设置name="123"，这个name经由Parent传递给Child的props中，非常的方便。父组件可以传递任何值给到子组件。
+
+2.2 PropTypes
+
+通过在组件中定义一个配置对象，React提供了一种验证props的方式：
+
+var Child = React.createClass({
+    propTypes: {
+        viewName:React.propTypes.shape({
+            id:React.propTypes.number.isRequired
+        }).isRequired,
+        onClick:React.propTypes.func
+    },
+    ......
+组件初始化时，如果传递的属性和propTypes不匹配，则会打印一个console.warn日志，如果是可选的配置，可以去掉.required。 在应用使用中，propTypes并不是强制性的，但这提供了一种极好的方式来描述组件的API。
+
+2.3 State
+
+每一个React组件都可以拥有自己的state，state与props的区别在于前者只存在与组件的内部。并不是组件之间所共享的。state可以用来确定一个元素的视图状态。
+
+var Parent = React.createClass({
+    getInitialState:function() {
+        return {
+            number:1
+        };
+    },    
+    render:function() {
+        return(
+            <div onClick={this.onClick}>
+                <button > hello {this.state.number} </button>
+            </div>
+            );
+    },
+
+    onClick:function() {
+        this.setState({
+            number:this.state.number+1
+        });
+    }
+});
+
+ReactDOM.render(<Parent></Parent>, document.body);
+如上代码，可以通过点击事件对state进行修改，调用setState的时候，会调用存在期的周期。也可以使用上面出现的getInitialState方法提供一组默认值，只要setState被调用，render就会被调用。如果render函数返回有变化，虚拟DOM就会更新，真实的DOM也会被更新，最终用户会在浏览器中看到变化。
+
+注意：不要直接修改this.state，永远记得要通过this.setState方法修改。
+3 事件
+
+对于用户而言，展示只占整体设计因素的一半。另一半则是响应用户输入，即通过JavaScript处理用户产生的事件。 React通过将时间处理器绑定到组件上来处理事件。在事件被触发的同时，更新组件的内部状态。组件内部状态的更新会触发组件重绘。因此，如果视图层想要渲染出时间触发后的结果，它所需要做的就是在渲染函数中读取组件的内部状态。
+
+3.1 绑定事件处理器
+
+React处理的事件本质上和原生的JavaScript时间一样：MouseEvents事件用于点击处理器，Change事件用于表单元素变化，等等。所有的事件在命名上和原生的JavaScript规范一致且会在相同的场景下被触发。 React绑定事件处理器的语法和HTML语法类似。比如一个按钮，功能是添加，写法如下：
+
+<button className="btn-add" onClick={this.handleAddClicked}>Add</button>
+用户点击这个按钮时，组件的handleAddClicked方法会被调用。这个方法中会包含处理Add的行为逻辑。
+
+这里我们可以怀疑onClick哪里来的呢，处理onClick还支持什么事件，这里里出了MouseEvents事件：
+
+onClick onContextMenu onDoubleClick onDrag onDragEnd onDragEnter onDragExit
+onDragLeave onDragOver onDragStart onDrop onMouseDown onMouseEnter onMouseLeave
+onMouseMove onMouseOut onMouseOver onMouseUp
+参考： https://facebook.github.io/react/docs/events.html
+
+3.2 事件对象
+
+很多事件处理器只要触发就会完成，但是有时候也会需要关于用户输入的跟多信息，然后有时候我们需要在输入的时候一直在监听输入的内容，及时的提醒给用户输入错误的提示，提高产品的体验。
+
+var React = require('react');
+var ReactDOM = require("react-dom");
+
+var InputListener = React.createClass({
+    handleInput:function(event) {
+        console.log(event.target.value);
+    },
+
+    render:function() {
+        return(
+            <div className="form-group">
+                <div className="input-item">
+                    <textarea rows="3" onChange={this.handleInput}/>
+                </div>
+            </div>
+        );
+    }
+});
+
+ReactDOM.render(<InputListener className="input">input</InputListener>, document.body);
+通常会有一个事件对象传入到React的时间处理器函数中，类似原生的JavaScript事件监听器的写法。这里的handleInput方法会接受一个事件的对象，并通过存取event.target.value互相传递事件对象的内容。在事件处理器中，使用event.target.value获取表单中的input值是一中常规的方法。
+
+编译脚本参考：第5.3小节：打包程序
+
+4 参考
+
+《React 引领未来的用户界面开发框架》
+	 -->
+</body>
+</html>

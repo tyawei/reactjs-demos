@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<script src="./build/react.js"></script>
+<script src="./build/react-dom.js"></script>
+<script src="./build/browser.min.js"></script>
+</head>
+<body>
+	<div id="example"></div>
+	<div id="example1"></div>
+	<div id="example2"></div>
+	<script type="text/babel">
+		/*var box=React.createElement("div",{className:"box"},
+			React.createElement("form",
+				React.createElement("label"),
+				React.createElement("input",{type:"text"})
+			)
+		)*/
+		/*
+		ReactDOM.render(
+			box,document.getElementById("example")
+		)
+		*/
+		
+		var Label=React.createClass({
+			render:function() {
+				return <label></label>
+			}
+		})
+		var Input=React.createClass({
+			render:function() {
+				return <input type="text" />
+			}
+		})
+		var Form=React.createClass({
+			render:function() {
+				return (
+					<form>
+						<Label />
+						<Input />
+					</form>
+				)
+			}
+		})
+		var Box=React.createClass({
+			render:function() {
+				return (
+					<div>
+						{/*<Form />也可以像下面这样创建*/}
+						{
+							React.createElement("form",null,
+								React.createElement(Label),
+								React.createElement(Input)
+							)
+						}
+					</div>
+				)
+			}
+		})
+		ReactDOM.render(<Box />,document.getElementById("example"));
+	</script>
+	
+</body>
+</html>

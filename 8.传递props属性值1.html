@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<script src="./build/react.js"></script>
+<script src="./build/react-dom.js"></script>
+<script src="./build/browser.min.js"></script>
+</head>
+<body>
+	<div id="example"></div>
+	<div id="example1"></div>
+	<div id="example2"></div>
+	<script type="text/babel">
+	/* 使用和传递同一个prop 
+		如果组件需要使用一个属性又要往下传递，可以直接使用 checked={checked} 再传一次。这样做比传整个 props 对象要好，因为更利于重构和语法检查 */
+	function FancyCheckbox(props) {
+		var {checked, title, ...other}=props;
+		var fancyClass=checked? "FancyChecked":"FancyUnchecked";
+		var fancyTitle=checked? "X"+title:"O"+title;
+		return (
+			<label>
+				<input {...other}
+					checked={checked}
+					className={fancyClass}
+					type="checkbox"
+				/>
+				{fancyTitle}
+			</label>
+		)
+	}
+	/* 注意：顺序很重要，把 {...other} 放到JSX props 前面会使 props 不会被覆盖。上面例子中我国可以保证 input 中的type是"checkbox" */
+
+
+	/* 剩余属性和展开属性:
+		剩余属性可以把对象剩下的属性提取到一个新的对象。这会把所有在解构赋值中列出的属性剔除。这是ECMAscript草案中的试验特性：
+		var {x,y,...z}={x:1,y:2,a:3,b:4};
+		x;//1
+		y;//2
+		z;//{a:3,b:4}
+	  注意：要用babel6转换rest和spread属性，你需要安装。。。
+	 */
+
+
+	 /* 使用 Underscore 来传递：
+	 	如果不使用JSX，可以使用一些库来实现相同的效果。。。*/
+
+	</script>
+	
+</body>
+</html>

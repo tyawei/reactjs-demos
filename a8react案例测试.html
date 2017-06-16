@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<style>
+.active {display:none}
+</style>
+<script src="./build/react.js"></script>
+<script src="./build/react-dom.js"></script>
+<script src="./build/browser.min.js"></script>
+</head>
+<body>
+	<div id="example"></div>
+	<div id="example1"></div>
+	<div id="example2"></div>
+	<script type="text/babel">
+		var Component=React.createClass({
+			getInitialState:function() {
+				return {
+					value:"Hello!"
+				}
+			},
+			handleChange:function(event) {
+				this.setState({value:event.target.value})
+				
+			},
+			render:function() {
+				return (
+					<input type="text"
+						   value={this.state.value}
+						   onChange={this.handleChange}
+					/>
+				)
+			}
+		});
+		ReactDOM.render(
+			<Component />,document.getElementById("example")
+		)
+		 /* 注意：textarea和输入框input是相同的用法。同时以上是event.target，没有this */
+		/*
+		var Component=React.createClass({
+			getInitialState:function() {
+				return {
+					checked:true
+				}
+			},
+			handleChange:function(event) {
+				this.setState({checked:!this.state.checked})
+			},
+			render:function() {
+				return (
+					<div>
+						<input type="checkbox"
+							   checked={this.state.checked} 
+							   onChange={this.handleChange}
+						/>单选
+					</div>
+				)
+			}
+		});
+		ReactDOM.render(
+			<Component />,document.getElementById("example")
+		)
+		*/
+		/*
+		var Component=React.createClass({
+			getInitialState:function() {
+				return {
+					value:"shang"
+				}
+			},
+			handleChange:function(event) {
+				this.setState({value:event.target.value})
+			},
+			render:function() {
+				return (
+					<select value={this.state.value} onChange={this.handleChange}>
+						<option value="bei">北京</option>
+						<option value="shang">上海</option>
+						<option value="guang">广州</option>
+					</select>
+				)
+			}
+		});
+		ReactDOM.render(
+			<Component />,document.getElementById("example")
+		)
+		*/ /* option在react中，不再使用selected来将对应的某个option选中，而是在select头部使用value或者defaultValue值来选中option中相应项的值*/
+
+
+
+
+	</script>
+	
+</body>
+</html>

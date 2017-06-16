@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<style>
+.active {display:none}
+</style>
+<script src="./build/react.js"></script>
+<script src="./build/react-dom.js"></script>
+<script src="./build/browser.min.js"></script>
+</head>
+<body>
+	<div id="example"></div>
+	<div id="example1"></div>
+	<div id="example2"></div>
+	<script type="text/babel">
+		var Component=React.createClass({
+			propTypes:{
+				attr:React.PropTypes.string.isRequired
+			},
+			render:function() {
+				return <div>{this.props.attr}</div>
+			}
+		})
+		var value=true; /* boolean与string不符合 */
+		ReactDOM.render(
+			<Component attr={value} />,document.getElementById("example")
+		)
+		/* warn:Failed propType:Invalid prop 'attr' of type...*/
+	</script>
+	
+</body>
+</html>

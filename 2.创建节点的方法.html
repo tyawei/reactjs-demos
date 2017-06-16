@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<script src="./build/react.js"></script>
+<script src="./build/react-dom.js"></script>
+<script src="./build/browser.min.js"></script>
+</head>
+<body>
+	<div id="example"></div>
+	<div id="example1"></div>
+	<div id="example2"></div>
+	<script type="text/babel">
+	/* 没有JSX语法的React，使用React.createElement方法 */
+		var child1=React.createElement('li',null,
+		'First Text Content');
+		var child2=React.createElement('li',null,'Second Text Content');
+		var root=React.createElement('ul',{className:'my-list'},child1,child2);
+		ReactDOM.render(root,document.getElementById('example'));
+	/* React已经为HTML标签提供内置工厂方法 */
+		var root=React.DOM.ul({className:'my-list'}, React.DOM.li(null,"Text Content"));
+		ReactDOM.render(root,document.getElementById('example1'));
+
+	/* 使用JSX语法创建标签 */
+		var myDivElement=<div className='foo' />;
+		ReactDOM.render(myDivElement, document.getElementById('example2'))
+	/* 要渲染React组件，只需要创建一个大写字母开头的本地变量 */
+		var MyComponent=React.createClass({
+			render:function() {
+				return <div>{this.props.someProperty}</div>
+			}
+		})
+		var myElement=<MyComponent someProperty={true} />;
+		ReactDOM.render(myElement,document.getElementById('example2'));
+	
+	/* JSX语法转换
+		var Nav;
+		var app=<Nav color='blue' />;
+		var app=React.createElement(Nav,{color:'blue'});*/
+
+	/* JSX也支持使用XML语法定义子节点 
+		var Nav,Profile;
+		var app=<Nav color='blue'><Profile>click</Profile></Nav>;
+		var app=React.createElement(
+			Nav,
+			{color:'blue'},
+			React.createElement(Profile, null, 'click')
+		);
+		ReactDOM.render(app, document.getElementById('example2'));*/
+	</script>
+	
+</body>
+</html>

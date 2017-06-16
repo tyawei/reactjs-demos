@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<script src="./build/react.js"></script>
+<script src="./build/react-dom.js"></script>
+<script src="./build/browser.min.js"></script>
+</head>
+<body>
+	<div id="example"></div>
+	<div id="example1"></div>
+	<div id="example2"></div>
+	<script type="text/babel">
+	/* 好像不好用 */
+	/* 如果你正在构建一个又很多子组件的组件，比如表单，你也许会最终得到许多的变量声明 */
+	var Form=MyFormComponent;
+	var FormRow=Form.Row;
+	var FormLabel=Form.Label;
+	var FormInput=Form.Input;
+
+	var App=(
+		<Form>
+			<FormRow>
+				<FormLabel />
+				<FormInput />
+			</FormRow>
+		</Form>
+	)
+
+	/* 为了使其更加简单和容易，命名组件令你使用包含其他组件作为属性的单一的组件 */
+	var Form=MyFormComponent;
+	var App=(
+		<Form>
+			<Form.Row>
+				<Form.Label />
+				<Form.Input />
+			</Form.Row>
+		</Form>
+	)
+
+	/* 要做到这一点，你只需要把你的“子组件”创建为主组件的属性*/
+	var MyFormComponent=React.createClass({});
+	MyFormComponent.Row=React.createClass({});
+	MyFormComponent.Label=React.createClass({});
+	MyFormComponent.Input=React.createClass({});
+
+	/* 当编译你的代码时，JSX会恰当的进行处理 */
+	var App=(
+		React.createElement(Form, null,
+			React.createElement(Form.Row, null,
+				React.createElement(Form.Label, null),
+				React.createElement(Form.Input, null)
+			)
+		)
+	)
+	</script>
+	
+</body>
+</html>

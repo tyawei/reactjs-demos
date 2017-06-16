@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<script src="./build/react.js"></script>
+<script src="./build/react-dom.js"></script>
+<script src="./build/browser.min.js"></script>
+</head>
+<body>
+	<div id="example"></div>
+	<div id="example1"></div>
+	<div id="example2"></div>
+	<script type="text/babel">
+		var Text=React.createClass({
+			getInitialState:function() {
+				return {word:"Some words here!"}
+			},
+			handleChange:function(e) {
+				this.setState({word:e.target.value},function() {
+					console.log(this.state.word)
+				});
+			},
+			render:function() {
+				return (
+					<div>
+						<p>我是通过react渲染出来的！</p>
+						<input type="text" defaultValue={this.state.word} onChange={this.handleChange} />
+					</div>
+				)
+			}
+
+		})
+		ReactDOM.render(<Text />,document.getElementById("example"));
+	</script>
+	
+</body>
+</html>

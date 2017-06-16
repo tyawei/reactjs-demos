@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<script src="./build/react.js"></script>
+<script src="./build/react-dom.js"></script>
+<script src="./build/browser.min.js"></script>
+</head>
+<body>
+	<div id="example"></div>
+	<div id="example1"></div>
+	<div id="example2"></div>
+	<script type="text/babel">
+	class MyInput extends React.Component{
+		constructor(props) {
+			super(props);
+			this.state={
+				value:"default"
+			}
+			this.handleChange=this.handleChange.bind(this)
+		}
+		handleChange(e) {
+			this.setState({value:e.target.value})
+		}
+		render() {
+			return (
+				<div>
+					<input type="text" value={this.state.value} onChange={this.handleChange} />
+				</div>
+			)
+		}
+	}
+	ReactDOM.render(
+		<MyInput />,document.getElementById("example")
+	)
+	</script>
+	
+</body>
+</html>

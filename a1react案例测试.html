@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<script src="./build/react.js"></script>
+<script src="./build/react-dom.js"></script>
+<script src="./build/browser.min.js"></script>
+</head>
+<body>
+	<div id="example"></div>
+	<div id="example1"></div>
+	<div id="example2"></div>
+	<script type="text/babel">
+		/*var component=React.createElement("div",{className:"box"},"some words");
+		*/
+		/*var component=React.DOM.div({className:"box"},"some words");
+		*/
+		/*var component=<div className="box">some words</div>;
+		*/
+		var Component=React.createClass({
+			render:function() {
+				return <div className="box">some words</div>
+			}
+		})
+		var component=<Component />;
+		ReactDOM.render(
+			component,
+			document.getElementById('example')
+		)
+	</script>
+	
+</body>
+</html>

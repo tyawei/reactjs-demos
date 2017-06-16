@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<script src="./build/react.js"></script>
+<script src="./build/react-dom.js"></script>
+<script src="./build/browser.min.js"></script>
+</head>
+<body>
+	<div id="example"></div>
+	<div id="example1"></div>
+	<div id="example2"></div>
+	<script type="text/babel">
+		var Component=React.createClass({
+			render:function() {
+				return <h3>Hello {this.props.name}</h3>
+			}
+		})
+		var props={
+			name:"Lucy",
+			gender:"female"
+		};
+		var component=<Component {...props} />; /* {...props}属性扩散的写法 */
+		ReactDOM.render(component,document.getElementById("example")); /* Hello Lucy */
+
+		/* 属性也可以被覆盖：写在后面的属性值会覆盖前面的属性值 */
+		var Component1=React.createClass({
+			render:function() {
+				return <h3>Hello {this.props.foo}</h3>
+			}
+		})
+		var props1={foo:"default"};
+		var component1=<Component1 {...props} foo={"override"} />;
+		console.log(component1.props.foo); /* override */
+		ReactDOM.render(component1,document.getElementById("example1")); /* Hello override */
+	</script>
+	<!-- 有时候你需要给组件设置多个属性，你不想一个个写下这些属性，或者有时候你甚至不知道这些属性的名称，这时候 spread attributes的功能就很有用了 -->
+</body>
+</html>
